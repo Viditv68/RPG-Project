@@ -1,6 +1,7 @@
 using UnityEngine;
 using RPG.Movement;
 using RPG.Core;
+using System;
 
 namespace RPG.Combat
 {
@@ -8,11 +9,15 @@ namespace RPG.Combat
     {
         [SerializeField]
         private float weaponRange = 2f;
+        [SerializeField]
+        private float timeBetweenAttacks = 1.5f;
 
         private Transform target;
+        private float timeSinceLastAttack = 0f;
 
         private void Update()
         {
+            timeSinceLastAttack += Time.deltaTime;
             if(target == null)
             {
                 return;
@@ -24,8 +29,19 @@ namespace RPG.Combat
             else
             {
                 GetComponent<Mover>().Cancel();
+                AttackBehaviour();
             }
 
+        }
+
+        private void AttackBehaviour()
+        {
+            if(timeSinceLastAttack > timeBetweenAttacks)
+            {
+                GetComponent<Animator>().SetTrigger("attack");
+                timeSinceLastAttack = 0f;
+            }
+            
         }
 
         private bool GetIsInRange()
@@ -42,6 +58,11 @@ namespace RPG.Combat
         public void Cancel()
         {
             target = null;
+        }
+
+        private void Hit()
+        {
+
         }
     }
 }
