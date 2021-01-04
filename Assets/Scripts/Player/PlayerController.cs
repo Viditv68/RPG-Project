@@ -29,15 +29,19 @@ namespace RPG.Control
             {
                 CombatTarget target = hit.transform.GetComponent<CombatTarget>();
 
-                if(target != null)
+                if(!GetComponent<Fighter>().CanAttack(target))
                 {
-                    if(Input.GetMouseButtonDown(0))
-                    {
-                        GetComponent<Fighter>().Attack(target);
-                        
-                    }
-                    return true;
+                    continue;
                 }
+
+                if(Input.GetMouseButtonDown(0))
+                {
+                
+                    GetComponent<Fighter>().Attack(target);
+                        
+                }
+                return true;
+                
             }
             return false;
             
