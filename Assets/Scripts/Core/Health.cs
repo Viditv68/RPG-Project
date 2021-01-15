@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-namespace RPG.Combat
+namespace RPG.Core
 {
     public class Health : MonoBehaviour
     {
@@ -13,11 +14,22 @@ namespace RPG.Combat
             health = Mathf.Max((health - damage), 0);
             Debug.Log(health);
 
-            if(health ==0 && !isDead)
+            if(health ==0)
             {
-                isDead = true;
-                GetComponent<Animator>().SetTrigger("die");
+                Die();
             }
+        }
+
+        private void Die()
+        {
+            if(isDead)
+            {
+                return;
+            }
+
+            isDead = true;
+            GetComponent<Animator>().SetTrigger("die");
+            GetComponent<ActionScheduler>().CancelCurrentAction();
         }
 
         public bool IsDead()
